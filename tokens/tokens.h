@@ -1,7 +1,7 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-#include "intdef.h"
+#include <intdef.h>
 
 #define MAX_TOKENS 256
 

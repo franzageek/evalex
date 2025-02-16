@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "tokens.h"
+#include "tokens/tokens.h"
 
 int main(void)
 {
