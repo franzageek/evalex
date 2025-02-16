@@ -1,2 +1,5 @@
-parsexp: *.c
-	gcc -o parsexp *.c -Wall -Wextra -pedantic -g
+CC = gcc
+CC_FLAGS = -Wall -Wextra -pedantic -g
+
+parsexp: *.c tokens/*.c
+	$(CC) $(CC_FLAGS) -o $@ $^
