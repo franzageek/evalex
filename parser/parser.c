@@ -43,7 +43,7 @@ u8 check_syntax(token_t* tokens)
                 --brackets;
                 break;
             }
-            case TOKEN_UNKNOWN:
+            default:
             {
                 ++unknowns;
                 break;
