@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <stdio.h>
 
 token_t* tokenize_expr(const char* expr)
 {
@@ -48,7 +47,7 @@ token_t* tokenize_expr(const char* expr)
         else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
         {
             tk->type = TOKEN_OPERATOR;
-            tk->operator = 
+            tk->operator.type = 
             (
                 (ch == '+') ? 
                     OPERATOR_ADD 
@@ -59,8 +58,17 @@ token_t* tokenize_expr(const char* expr)
                 : (ch == '*') ?
                     OPERATOR_MUL 
 
-                : 
+                :
                     OPERATOR_DIV
+            );
+
+            tk->operator.precedence =
+            (
+                (ch == '+' || ch == '-') ? 
+                    PREC_SUM 
+
+                :
+                    PREC_MUL
             );
         }
         else if (ch == '(' || ch == ')')
@@ -76,9 +84,23 @@ token_t* tokenize_expr(const char* expr)
 
         if (token_count == token_queue_count)
         {
+            
             token_queue_count *= 2;
-            tokens = (token_t*)realloc(tokens, (token_queue_count+1) * sizeof(token_t));
-            memset(&tokens[token_count+1], 0, sizeof(token_t)*(token_queue_count+1-token_count+1));
+            token_t* tmp = (token_t*)calloc((token_queue_count+1), sizeof(token_t));
+            if (tmp != NULL)
+            {
+                memcpy(tmp, tokens, (token_count) * sizeof(token_t));
+                free(tokens);
+                tokens = tmp;
+            }
+            else
+            {
+                free(tk);
+                return NULL;
+            }
+            #ifdef __DEBUG__
+            printf("Successfully allocated %u+1 tokens as a post to %u+1.\n", token_queue_count, token_queue_count/2);
+            #endif
         }
 
         memcpy(&tokens[token_count], tk, sizeof(token_t));
@@ -112,13 +134,13 @@ void print_tokens(token_t* tokens)
         else if (tokens[i].type == TOKEN_OPERATOR)
         {
             printf("\e[7;36moperator ");
-            if (tokens[i].operator == OPERATOR_ADD)
+            if (tokens[i].operator.type == OPERATOR_ADD)
                 printf("[ADD]:\e[0;36m +\e[0m\n");
 
-            else if (tokens[i].operator == OPERATOR_SUB)
+            else if (tokens[i].operator.type == OPERATOR_SUB)
                 printf("[SUB]:\e[0;36m -\e[0m\n");
 
-            else if (tokens[i].operator == OPERATOR_MUL)
+            else if (tokens[i].operator.type == OPERATOR_MUL)
                 printf("[MUL]:\e[0;36m *\e[0m\n");
 
             else
@@ -131,15 +153,3 @@ void print_tokens(token_t* tokens)
     }
     return;
 }
-/*
-void free_tokens(token_t** tokens)
-{
-    u8 i = 0;
-    while (tokens[i] != NULL)
-    {
-        free(tokens[i]);
-        ++i;
-    }
-    free(tokens);
-    return;
-}*/

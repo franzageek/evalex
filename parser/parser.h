@@ -5,6 +5,6 @@
 #include "../tokens/tokens.h"
 
 u8 check_syntax(token_t* tokens);
-//const char* expr_to_rpn(token_t** tokens);
+token_t* expr_to_rpn(token_t* tokens);
 
 #endif // PARSER_H
