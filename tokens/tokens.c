@@ -1,16 +1,17 @@
 #include "tokens.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 #include <stdio.h>
 
-token_t** tokenize_expr(const char* expr)
+token_t* tokenize_expr(const char* expr)
 {
     u8 token_queue_count = 8;
     u8 token_count = 0;
     u64 index = 0;
     char ch = '\0';
     
-    token_t** tokens = (token_t**)malloc(token_queue_count * sizeof(token_t*));
+    token_t* tokens = (token_t*)calloc(token_queue_count+1, sizeof(token_t));
     if (tokens == NULL)
         return NULL;
     
@@ -25,13 +26,10 @@ token_t** tokenize_expr(const char* expr)
             continue;
         }
 
-        tk = (token_t*)malloc(sizeof(token_t));
+        tk = (token_t*)calloc(1, sizeof(token_t));
 
         if (tk == NULL)
         {
-            for (u8 j = 0; j < token_count; ++j)
-                free(tokens[j]);
-
             free(tokens);
             return NULL;
         }
@@ -50,7 +48,20 @@ token_t** tokenize_expr(const char* expr)
         else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
         {
             tk->type = TOKEN_OPERATOR;
-            tk->value = ch;
+            tk->operator = 
+            (
+                (ch == '+') ? 
+                    OPERATOR_ADD 
+
+                : (ch == '-') ? 
+                    OPERATOR_SUB 
+
+                : (ch == '*') ?
+                    OPERATOR_MUL 
+
+                : 
+                    OPERATOR_DIV
+            );
         }
         else if (ch == '(' || ch == ')')
         {
@@ -66,39 +77,61 @@ token_t** tokenize_expr(const char* expr)
         if (token_count == token_queue_count)
         {
             token_queue_count *= 2;
-            tokens = (token_t**)realloc(tokens, token_queue_count * sizeof(token_t*));
+            tokens = (token_t*)realloc(tokens, (token_queue_count+1) * sizeof(token_t));
+            memset(&tokens[token_count+1], 0, sizeof(token_t)*(token_queue_count+1-token_count+1));
         }
 
-        tokens[token_count] = tk;
-
+        memcpy(&tokens[token_count], tk, sizeof(token_t));
+        free(tk);
         ++token_count;
         ++index;
     }
     return tokens;
 }
 
-void print_tokens(token_t** tokens)
+void print_tokens(token_t* tokens)
 {
     u8 i = 0;
-    while (tokens[i] != NULL)
+    while (tokens[i].type != TOKEN_NULL)
     {
-        if (tokens[i]->type == TOKEN_LITERAL)
-            printf("literal: %lu\n", tokens[i]->literal);
+        if (tokens[i].type == TOKEN_LITERAL)
+            printf("\e[7;33mliteral       :\e[0;33m %lu\e[0m\n", tokens[i].literal);
 
-        else if (tokens[i]->type == TOKEN_OPEN_BRACKET || tokens[i]->type == TOKEN_CLOSE_BRACKET)
-            printf("bracket: %c\n", tokens[i]->value);
+        else if (tokens[i].type == TOKEN_OPEN_BRACKET || tokens[i].type == TOKEN_CLOSE_BRACKET)
+        {
+            printf("\e[7;34mbracket  ");
+            if (tokens[i].type == TOKEN_OPEN_BRACKET)
+                printf("[OPB]:");
 
-        else if (tokens[i]->type == TOKEN_OPERATOR)
-            printf("operator: %c\n", tokens[i]->value);
+            else
+                printf("[CLB]:");
 
+            printf("\e[0;34m %c\e[0m\n", tokens[i].value);
+        }
+
+        else if (tokens[i].type == TOKEN_OPERATOR)
+        {
+            printf("\e[7;36moperator ");
+            if (tokens[i].operator == OPERATOR_ADD)
+                printf("[ADD]:\e[0;36m +\e[0m\n");
+
+            else if (tokens[i].operator == OPERATOR_SUB)
+                printf("[SUB]:\e[0;36m -\e[0m\n");
+
+            else if (tokens[i].operator == OPERATOR_MUL)
+                printf("[MUL]:\e[0;36m *\e[0m\n");
+
+            else
+                printf("[DIV]:\e[0;36m /\e[0m\n");   
+        }
         else
-            printf("\e[7;31munknown:\e[0;31m %c\e[0m\n", tokens[i]->value);
+            printf("\e[7;31munknown       :\e[0;31m %c\e[0m\n", tokens[i].value);
 
         ++i;
     }
     return;
 }
-
+/*
 void free_tokens(token_t** tokens)
 {
     u8 i = 0;
@@ -109,4 +142,4 @@ void free_tokens(token_t** tokens)
     }
     free(tokens);
     return;
-}
+}*/

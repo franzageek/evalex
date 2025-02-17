@@ -7,11 +7,20 @@
 
 typedef enum
 {
+    OPERATOR_ADD,
+    OPERATOR_SUB,
+    OPERATOR_MUL,
+    OPERATOR_DIV,
+} operator_type_t;
+
+typedef enum
+{
+    TOKEN_NULL,
+    TOKEN_UNKNOWN, 
     TOKEN_LITERAL,
     TOKEN_OPERATOR,
     TOKEN_OPEN_BRACKET,
     TOKEN_CLOSE_BRACKET,
-    TOKEN_UNKNOWN
 } token_type_t;
 
 typedef struct
@@ -20,12 +29,13 @@ typedef struct
     union
     {
         u64 literal;
+        operator_type_t operator;
         char value;
     };
 } token_t;
 
-token_t** tokenize_expr(const char* exp);
-void print_tokens(token_t** tokens);
-void free_tokens(token_t** tokens);
+token_t* tokenize_expr(const char* exp);
+void print_tokens(token_t* tokens);
+//void free_tokens(token_t* tokens);
 
 #endif // TOKENS_H
