@@ -95,12 +95,7 @@ u8 check_precedence(token_t* in_tk)
     else
         return 0;
 }
-/*
-u8 is_op_stack_empty(void)
-{
-    return (op_stack.top == 0);
-}
-*/
+
 token_t* stacks_cleanup(void)
 {
     #ifdef __DEBUG__
