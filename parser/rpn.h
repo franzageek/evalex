@@ -8,7 +8,7 @@ typedef enum
 {
     STACK_INPUT,
     STACK_OUTPUT,
-    STACK_OP_STACK
+    STACK_OP
 } stack_type_t;
 
 typedef struct
@@ -19,11 +19,12 @@ typedef struct
 } stack_t;
 
 u8 init_stacks(u8 size);
-void free_stacks(void);
-u8 move_to_stack(token_t* tk, stack_type_t stack_type);
+stack_t* get_stack(stack_type_t type);
+token_t* get_top_item(stack_type_t type);
+u8 move_to_stack(token_t* tk, stack_t* stack);
 u8 pop_operator_to_output(void);
 u8 check_precedence(token_t* in_tk);
-u8 is_op_stack_empty(void);
+/*u8 is_op_stack_empty(void);*/
 token_t* stacks_cleanup(void);  //Maybe rework RPN API
 
 #endif // RPN_H

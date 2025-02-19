@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    const char* expr = "3+4*2/5";
+    const char* expr = "(3+(4/1-1)+3*1)";
     printf("PARSeXP\n");
     printf("expr: %s\n", expr);
     token_t* tokens = tokenize_expr(expr);

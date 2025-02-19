@@ -18,7 +18,7 @@ typedef enum
 {
     PREC_MUL,
     PREC_SUM,
-    PREC_NULL
+    PREC_BRACKET,
 } precedence_type_t;
 
 typedef struct 

@@ -9,7 +9,6 @@
 
 stack_t output_queue;
 stack_t op_stack;
-stack_t* curr_stack = NULL;
 
 u8 init_stacks(u8 size)
 {
@@ -32,33 +31,44 @@ u8 init_stacks(u8 size)
     return 0;
 }
 
-void free_stacks(void)
+stack_t* get_stack(stack_type_t type)
 {
-    free(output_queue.stack);
-    free(op_stack.stack);
-}
-
-u8 move_to_stack(token_t* tk, stack_type_t stack_type)
-{
-    curr_stack = 
+    return 
     (
-        (stack_type == STACK_OUTPUT) ? 
+        (type == STACK_OUTPUT) ? 
             &output_queue 
             
-        : (stack_type == STACK_OP_STACK) ? 
+        : (type == STACK_OP) ? 
             &op_stack 
         
         : 
             NULL
     );
+}
 
-    if (curr_stack->top == curr_stack->max-1)
+token_t* get_top_item(stack_type_t type)
+{
+    return 
+    (
+        (type == STACK_OUTPUT) ? 
+            &(output_queue.stack[output_queue.top-1])
+            
+        : (type == STACK_OP) ? 
+            &(op_stack.stack[op_stack.top-1]) 
+        
+        : 
+            NULL
+    );
+}
+
+u8 move_to_stack(token_t* tk, stack_t* stack)
+{
+    if (stack->top == stack->max-1)
         return 1;
     
-    memcpy(&curr_stack->stack[curr_stack->top], tk, sizeof(token_t));
-    ++curr_stack->top;
+    memcpy(&(stack->stack[stack->top]), tk, sizeof(token_t));
+    ++stack->top;
     memset(tk, 0, sizeof(token_t));
-    curr_stack = NULL;
     return 0;
 }
 
@@ -68,7 +78,7 @@ u8 pop_operator_to_output(void)
         return 1;
 
     --op_stack.top;
-    return move_to_stack(&op_stack.stack[op_stack.top], STACK_OUTPUT);
+    return move_to_stack(&(op_stack.stack[op_stack.top]), &output_queue);
 }
 
 u8 check_precedence(token_t* in_tk)
@@ -85,18 +95,18 @@ u8 check_precedence(token_t* in_tk)
     else
         return 0;
 }
-
+/*
 u8 is_op_stack_empty(void)
 {
     return (op_stack.top == 0);
 }
-
+*/
 token_t* stacks_cleanup(void)
 {
     #ifdef __DEBUG__
     assert(op_stack.top == 0);
     #endif
-    
+
     free(op_stack.stack);
     memset(&op_stack, 0, sizeof(stack_t));
     output_queue.max = output_queue.top = 0;

@@ -75,7 +75,8 @@ token_t* tokenize_expr(const char* expr)
         else if (ch == '(' || ch == ')')
         {
             tk->type = (ch == '(') ? TOKEN_OPEN_BRACKET : TOKEN_CLOSE_BRACKET;
-            tk->value = ch;
+            tk->operator.type = OPERATOR_NULL;
+            tk->operator.precedence = PREC_BRACKET;
         }
         else
         {
@@ -124,12 +125,11 @@ void print_tokens(token_t* tokens)
         {
             printf("\e[7;34mbracket  ");
             if (tokens[i].type == TOKEN_OPEN_BRACKET)
-                printf("[OPB]:");
+                printf("[OPB]:\e[0;34m (\e[0m\n");
 
             else
-                printf("[CLB]:");
+                printf("[CLB]:\e[0;34m )\e[0m\n");
 
-            printf("\e[0;34m %c\e[0m\n", tokens[i].value);
         }
 
         else if (tokens[i].type == TOKEN_OPERATOR)
