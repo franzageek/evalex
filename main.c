@@ -19,7 +19,6 @@ int main(void)
     }
     else
         printf("Syntax error\n");
-
     free(tokens);
     return 0;
 }
