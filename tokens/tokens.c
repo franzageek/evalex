@@ -6,8 +6,8 @@
 
 token_t* tokenize_expr(const char* expr)
 {
-    u8 token_queue_count = 8;
-    u8 token_count = 0;
+    u16 token_queue_count = 8;
+    u16 token_count = 0;
     u64 index = 0;
     char ch = '\0';
     
@@ -17,8 +17,14 @@ token_t* tokenize_expr(const char* expr)
     
     token_t* tk = NULL;
 
-    while (expr[index] != '\0' /*&& token_count < MAX_TOKENS*/)
+    while (expr[index] != '\0')
     {
+        if (token_count == MAX_TOKENS-1)
+        {
+            free(tokens);
+            return NULL;
+        }
+
         ch = expr[index];
         if (ch == ' ')
         {
@@ -110,12 +116,15 @@ token_t* tokenize_expr(const char* expr)
         ++token_count;
         ++index;
     }
+    #ifdef __DEBUG__
+    printf("Successfully generated %u tokens.\n", token_count);
+    #endif
     return tokens;
 }
 
 void print_tokens(token_t* tokens)
 {
-    u8 i = 0;
+    u16 i = 0;
     while (tokens[i].type != TOKEN_NULL)
     {
         if (tokens[i].type == TOKEN_LITERAL)

@@ -14,11 +14,11 @@ typedef enum
 typedef struct
 {
     token_t* stack;
-    u8 max;
-    u8 top;
+    u16 max;
+    u16 top;
 } stack_t;
 
-u8 init_stacks(u8 size);
+u8 init_stacks(u16 size);
 stack_t* get_stack(stack_type_t type);
 token_t* get_top_item(stack_type_t type);
 u8 move_to_stack(token_t* tk, stack_t* stack);

@@ -10,7 +10,7 @@
 stack_t output_queue;
 stack_t op_stack;
 
-u8 init_stacks(u8 size)
+u8 init_stacks(u16 size)
 {
     output_queue.stack = (token_t*)calloc(size, sizeof(token_t));
     op_stack.stack = (token_t*)calloc(size, sizeof(token_t));

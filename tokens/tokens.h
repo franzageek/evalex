@@ -3,7 +3,7 @@
 
 #include <intdef.h>
 
-#define MAX_TOKENS 256
+#define MAX_TOKENS 512
 
 typedef enum
 {

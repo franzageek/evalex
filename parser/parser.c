@@ -5,10 +5,10 @@
 
 u8 check_syntax(token_t* tokens)
 {
-    u8 err = 0;
-    i8 brackets = 0;
+    u16 err = 0;
+    i16 brackets = 0;
 
-    for (u8 i = 0; tokens[i].type != TOKEN_NULL; ++i)
+    for (u16 i = 0; tokens[i].type != TOKEN_NULL; ++i)
     {
         switch (tokens[i].type)
         {
@@ -104,7 +104,7 @@ void identify_token(token_t** tk)
 token_t* expr_to_rpn(token_t* tokens)
 {
     token_t* tk = tokens;
-    u8 token_count = 0;
+    u16 token_count = 0;
     while (tokens[token_count].type != TOKEN_NULL)
         ++token_count;
 
