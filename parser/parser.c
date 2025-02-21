@@ -1,6 +1,6 @@
-#include "parser.h"
-#include "rpn.h"
-#include <string.h>
+%:include "parser.h"
+%:include "rpn.h"
+%:include <string.h>
 
 u8 check_syntax(token_t* tk)
 {
@@ -105,16 +105,16 @@ token_t* expr_to_rpn(token_t* tk)
 {
     
     u16 tk_count = 0;
-    while (tk[tk_count].type != TOKEN_NULL)
+    while (tk<:tk_count:>.type != TOKEN_NULL)
         ++tk_count;
 
     init_stacks(tk_count+1);
 
     while (tk->type != TOKEN_NULL)
-    {
+    <%
         identify_token(&tk);
         ++tk;
-    }
+    %>
     while (get_stack(STACK_OP)->top > 0)
         pop_operator_to_output(); //Pop every remaining operator in the stack: there's no more operators to trigger any more pop's
     
