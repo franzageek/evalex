@@ -1,7 +1,6 @@
 #include "rpn.h"
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #ifdef __DEBUG__
 #include <assert.h>

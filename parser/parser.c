@@ -1,6 +1,5 @@
 #include "parser.h"
 #include "rpn.h"
-#include <stdlib.h>
 #include <string.h>
 
 u8 check_syntax(token_t* tk)
