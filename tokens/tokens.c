@@ -11,6 +11,7 @@ token_t* tokenize_expr(const char* expr)
     u64 index = 0;
     char ch = '\0';
     
+    token_t* tmp = NULL;
     token_t* tokens = (token_t*)calloc(token_queue_count+1, sizeof(token_t));
     if (tokens == NULL)
         return NULL;
@@ -94,12 +95,13 @@ token_t* tokenize_expr(const char* expr)
         {
             
             token_queue_count *= 2;
-            token_t* tmp = (token_t*)calloc((token_queue_count+1), sizeof(token_t));
+            tmp = (token_t*)calloc((token_queue_count+1), sizeof(token_t));
             if (tmp != NULL)
             {
                 memcpy(tmp, tokens, (token_count) * sizeof(token_t));
                 free(tokens);
                 tokens = tmp;
+                tmp = NULL;
             }
             else
             {
@@ -122,18 +124,17 @@ token_t* tokenize_expr(const char* expr)
     return tokens;
 }
 
-void print_tokens(token_t* tokens)
+void print_tokens(token_t* tk)
 {
-    u16 i = 0;
-    while (tokens[i].type != TOKEN_NULL)
+    while (tk->type != TOKEN_NULL)
     {
-        if (tokens[i].type == TOKEN_LITERAL)
-            printf("\e[7;33mliteral       :\e[0;33m %lu\e[0m\n", tokens[i].literal);
+        if (tk->type == TOKEN_LITERAL)
+            printf("\e[7;33mliteral       :\e[0;33m %ld\e[0m\n", tk->literal);
 
-        else if (tokens[i].type == TOKEN_OPEN_BRACKET || tokens[i].type == TOKEN_CLOSE_BRACKET)
+        else if (tk->type == TOKEN_OPEN_BRACKET || tk->type == TOKEN_CLOSE_BRACKET)
         {
             printf("\e[7;34mbracket  ");
-            if (tokens[i].type == TOKEN_OPEN_BRACKET)
+            if (tk->type == TOKEN_OPEN_BRACKET)
                 printf("[OPB]:\e[0;34m (\e[0m\n");
 
             else
@@ -141,25 +142,25 @@ void print_tokens(token_t* tokens)
 
         }
 
-        else if (tokens[i].type == TOKEN_OPERATOR)
+        else if (tk->type == TOKEN_OPERATOR)
         {
             printf("\e[7;36moperator ");
-            if (tokens[i].operator.type == OPERATOR_ADD)
+            if (tk->operator.type == OPERATOR_ADD)
                 printf("[ADD]:\e[0;36m +\e[0m\n");
 
-            else if (tokens[i].operator.type == OPERATOR_SUB)
+            else if (tk->operator.type == OPERATOR_SUB)
                 printf("[SUB]:\e[0;36m -\e[0m\n");
 
-            else if (tokens[i].operator.type == OPERATOR_MUL)
+            else if (tk->operator.type == OPERATOR_MUL)
                 printf("[MUL]:\e[0;36m *\e[0m\n");
 
             else
                 printf("[DIV]:\e[0;36m /\e[0m\n");   
         }
         else
-            printf("\e[7;31munknown       :\e[0;31m %c\e[0m\n", tokens[i].value);
+            printf("\e[7;31munknown       :\e[0;31m %c\e[0m\n", tk->value);
 
-        ++i;
+        ++tk;
     }
     return;
 }

@@ -4,7 +4,7 @@
 #include <intdef.h>
 #include "../tokens/tokens.h"
 
-u8 check_syntax(token_t* tokens);
-token_t* expr_to_rpn(token_t* tokens);
+u8 check_syntax(token_t* tk);
+token_t* expr_to_rpn(token_t* tk);
 
 #endif // PARSER_H

@@ -3,32 +3,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-u8 check_syntax(token_t* tokens)
+u8 check_syntax(token_t* tk)
 {
     u16 err = 0;
     i16 brackets = 0;
 
-    for (u16 i = 0; tokens[i].type != TOKEN_NULL; ++i)
+    while (tk->type != TOKEN_NULL)
     {
-        switch (tokens[i].type)
+        switch (tk->type)
         {
             case TOKEN_OPERATOR:
             {
-                if (tokens[i+1].type != TOKEN_LITERAL && tokens[i+1].type != TOKEN_OPEN_BRACKET)
+                if ((tk+1)->type != TOKEN_LITERAL && (tk+1)->type != TOKEN_OPEN_BRACKET)
                     ++err;
 
                 break;
             }
             case TOKEN_LITERAL:
             {
-                if (tokens[i+1].type == TOKEN_OPEN_BRACKET || tokens[i+1].type == TOKEN_LITERAL)
+                if ((tk+1)->type == TOKEN_OPEN_BRACKET || (tk+1)->type == TOKEN_LITERAL)
                     ++err;
 
                 break;
             }
             case TOKEN_OPEN_BRACKET:
             {
-                if (tokens[i+1].type != TOKEN_LITERAL && tokens[i+1].type != TOKEN_OPEN_BRACKET)
+                if ((tk+1)->type != TOKEN_LITERAL && (tk+1)->type != TOKEN_OPEN_BRACKET)
                     ++err;
 
                 ++brackets;
@@ -36,7 +36,7 @@ u8 check_syntax(token_t* tokens)
             }
             case TOKEN_CLOSE_BRACKET:
             {
-                if (tokens[i+1].type == TOKEN_OPEN_BRACKET || tokens[i+1].type == TOKEN_LITERAL)
+                if ((tk+1)->type == TOKEN_OPEN_BRACKET || (tk+1)->type == TOKEN_LITERAL)
                     ++err;
 
                 --brackets;
@@ -48,6 +48,7 @@ u8 check_syntax(token_t* tokens)
                 break;
             }
         }
+        ++tk;
     }
 
     return 
@@ -101,14 +102,14 @@ void identify_token(token_t** tk)
     return;
 }
 
-token_t* expr_to_rpn(token_t* tokens)
+token_t* expr_to_rpn(token_t* tk)
 {
-    token_t* tk = tokens;
-    u16 token_count = 0;
-    while (tokens[token_count].type != TOKEN_NULL)
-        ++token_count;
+    
+    u16 tk_count = 0;
+    while (tk[tk_count].type != TOKEN_NULL)
+        ++tk_count;
 
-    init_stacks(token_count+1);
+    init_stacks(tk_count+1);
 
     while (tk->type != TOKEN_NULL)
     {

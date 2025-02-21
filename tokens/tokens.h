@@ -44,13 +44,13 @@ typedef struct
     token_type_t type;
     union
     {
-        u64 literal;
+        i64 literal;
         operator_t operator;
         char value;
     };
 } token_t;
 
 token_t* tokenize_expr(const char* exp);
-void print_tokens(token_t* tokens);
+void print_tokens(token_t* tk);
 
 #endif // TOKENS_H

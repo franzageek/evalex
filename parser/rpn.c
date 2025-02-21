@@ -81,13 +81,13 @@ u8 pop_operator_to_output(void)
     return move_to_stack(&(op_stack.stack[op_stack.top]), &output_queue);
 }
 
-u8 check_precedence(token_t* in_tk)
+u8 check_precedence(token_t* tk)
 {
     if 
     ((
         op_stack.top > 0 
         &&
-        in_tk->operator.precedence < op_stack.stack[op_stack.top-1].operator.precedence
+        tk->operator.precedence < op_stack.stack[op_stack.top-1].operator.precedence
     ) || (
         op_stack.top == 0
     ))
