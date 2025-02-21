@@ -130,36 +130,36 @@ void print_tokens(token_t* tk)
     {
         if (tk->type == TOKEN_LITERAL)
             printf("\e[7;33mliteral       :\e[0;33m %ld\e[0m\n", tk->literal);
-
+        
         else if (tk->type == TOKEN_OPEN_BRACKET || tk->type == TOKEN_CLOSE_BRACKET)
         {
             printf("\e[7;34mbracket  ");
             if (tk->type == TOKEN_OPEN_BRACKET)
                 printf("[OPB]:\e[0;34m (\e[0m\n");
-
+            
             else
                 printf("[CLB]:\e[0;34m )\e[0m\n");
-
+            
         }
-
+        
         else if (tk->type == TOKEN_OPERATOR)
         {
             printf("\e[7;36moperator ");
             if (tk->operator.type == OPERATOR_ADD)
                 printf("[ADD]:\e[0;36m +\e[0m\n");
-
+            
             else if (tk->operator.type == OPERATOR_SUB)
                 printf("[SUB]:\e[0;36m -\e[0m\n");
-
+            
             else if (tk->operator.type == OPERATOR_MUL)
                 printf("[MUL]:\e[0;36m *\e[0m\n");
-
+            
             else
                 printf("[DIV]:\e[0;36m /\e[0m\n");   
         }
         else
             printf("\e[7;31munknown       :\e[0;31m %c\e[0m\n", tk->value);
-
+        
         ++tk;
     }
     return;
