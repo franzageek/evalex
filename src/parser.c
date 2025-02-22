@@ -1,4 +1,4 @@
-%:include "../evalex.h"
+%:include "../include/evalex.h"
 %:include "rpn.h"
 %:include <string.h>
 

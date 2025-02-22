@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "evalex.h"
+#include "include/evalex.h"
 
 int main(void)
 {

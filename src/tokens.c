@@ -1,4 +1,4 @@
-#include "../evalex.h"
+#include "../include/evalex.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -108,7 +108,7 @@ token_t* tokenize_expr(const char* expr)
                 free(tk);
                 return NULL;
             }
-            #ifdef __DEBUG__
+            #ifdef DEBUG
             printf("Successfully allocated %u+1 tokens as a post to %u+1.\n", queue_count, queue_count/2);
             #endif
         }
@@ -118,7 +118,7 @@ token_t* tokenize_expr(const char* expr)
         ++tk_count;
         ++index;
     }
-    #ifdef __DEBUG__
+    #ifdef DEBUG
     printf("Successfully generated %u tokens.\n", tk_count);
     #endif
     return tokens;

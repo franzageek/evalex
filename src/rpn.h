@@ -1,7 +1,7 @@
 #ifndef RPN_H
 #define RPN_H
 
-#include "../evalex.h"
+#include "../include/evalex.h"
 
 typedef enum
 {
