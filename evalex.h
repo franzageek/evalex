@@ -19,12 +19,12 @@ typedef struct
 {
     enum 
     {
-        TOKEN_NULL,
-        TOKEN_UNKNOWN, 
-        TOKEN_LITERAL,
-        TOKEN_OPERATOR,
-        TOKEN_OPEN_BRACKET,
-        TOKEN_CLOSE_BRACKET,
+        TK_NULL,
+        TK_UNKNOWN, 
+        TK_LITERAL,
+        TK_OPERATOR,
+        TK_OPEN_BRACKET,
+        TK_CLOSE_BRACKET,
     } type;
     union
     {
@@ -33,19 +33,19 @@ typedef struct
         {
             enum 
             {
-                OPERATOR_NULL,
-                OPERATOR_ADD,
-                OPERATOR_SUB,
-                OPERATOR_MUL,
-                OPERATOR_DIV,
+                OP_NULL,
+                OP_ADD,
+                OP_SUB,
+                OP_MUL,
+                OP_DIV,
             } type;
             enum 
             {
                 PREC_MUL,
                 PREC_SUM,
                 PREC_BRACKET,
-            } precedence;
-        } operator;
+            } prec;
+        } op;
         char value;
     };
 } token_t;

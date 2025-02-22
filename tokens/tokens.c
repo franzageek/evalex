@@ -6,13 +6,13 @@
 
 token_t* tokenize_expr(const char* expr)
 {
-    u16 token_queue_count = 8;
-    u16 token_count = 0;
+    u16 queue_count = 8;
+    u16 tk_count = 0;
     u64 index = 0;
     char ch = '\0';
     
     token_t* tmp = NULL;
-    token_t* tokens = (token_t*)calloc(token_queue_count+1, sizeof(token_t));
+    token_t* tokens = (token_t*)calloc(queue_count+1, sizeof(token_t));
     if (tokens == NULL)
         return NULL;
     
@@ -20,7 +20,7 @@ token_t* tokenize_expr(const char* expr)
     
     while (expr[index] != '\0')
     {
-        if (token_count == MAX_TOKENS-1)
+        if (tk_count == MAX_TOKENS-1)
         {
             free(tokens);
             return NULL;
@@ -43,7 +43,7 @@ token_t* tokenize_expr(const char* expr)
         
         if (isdigit(ch))
         {
-            tk->type = TOKEN_LITERAL;
+            tk->type = TK_LITERAL;
             tk->literal = 0;
             while (isdigit(ch))
             {
@@ -54,23 +54,23 @@ token_t* tokenize_expr(const char* expr)
         }
         else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
         {
-            tk->type = TOKEN_OPERATOR;
-            tk->operator.type = 
+            tk->type = TK_OPERATOR;
+            tk->op.type = 
             (
                 (ch == '+') ? 
-                    OPERATOR_ADD 
+                    OP_ADD 
 
                 : (ch == '-') ? 
-                    OPERATOR_SUB 
+                    OP_SUB 
 
                 : (ch == '*') ?
-                    OPERATOR_MUL 
+                    OP_MUL 
 
                 :
-                    OPERATOR_DIV
+                    OP_DIV
             );
 
-            tk->operator.precedence =
+            tk->op.prec =
             (
                 (ch == '+' || ch == '-') ? 
                     PREC_SUM 
@@ -81,24 +81,24 @@ token_t* tokenize_expr(const char* expr)
         }
         else if (ch == '(' || ch == ')')
         {
-            tk->type = (ch == '(') ? TOKEN_OPEN_BRACKET : TOKEN_CLOSE_BRACKET;
-            tk->operator.type = OPERATOR_NULL;
-            tk->operator.precedence = PREC_BRACKET;
+            tk->type = (ch == '(') ? TK_OPEN_BRACKET : TK_CLOSE_BRACKET;
+            tk->op.type = OP_NULL;
+            tk->op.prec = PREC_BRACKET;
         }
         else
         {
-            tk->type = TOKEN_UNKNOWN;
+            tk->type = TK_UNKNOWN;
             tk->value = ch;
         }
 
-        if (token_count == token_queue_count)
+        if (tk_count == queue_count)
         {
             
-            token_queue_count *= 2;
-            tmp = (token_t*)calloc((token_queue_count+1), sizeof(token_t));
+            queue_count *= 2;
+            tmp = (token_t*)calloc((queue_count+1), sizeof(token_t));
             if (tmp != NULL)
             {
-                memcpy(tmp, tokens, (token_count) * sizeof(token_t));
+                memcpy(tmp, tokens, (tk_count) * sizeof(token_t));
                 free(tokens);
                 tokens = tmp;
                 tmp = NULL;
@@ -109,32 +109,32 @@ token_t* tokenize_expr(const char* expr)
                 return NULL;
             }
             #ifdef __DEBUG__
-            printf("Successfully allocated %u+1 tokens as a post to %u+1.\n", token_queue_count, token_queue_count/2);
+            printf("Successfully allocated %u+1 tokens as a post to %u+1.\n", queue_count, queue_count/2);
             #endif
         }
 
-        memcpy(&tokens[token_count], tk, sizeof(token_t));
+        memcpy(&tokens[tk_count], tk, sizeof(token_t));
         free(tk);
-        ++token_count;
+        ++tk_count;
         ++index;
     }
     #ifdef __DEBUG__
-    printf("Successfully generated %u tokens.\n", token_count);
+    printf("Successfully generated %u tokens.\n", tk_count);
     #endif
     return tokens;
 }
 
 void print_tokens(token_t* tk)
 {
-    while (tk->type != TOKEN_NULL)
+    while (tk->type != TK_NULL)
     {
-        if (tk->type == TOKEN_LITERAL)
+        if (tk->type == TK_LITERAL)
             printf("\e[7;33mliteral       :\e[0;33m %ld\e[0m\n", tk->literal);
         
-        else if (tk->type == TOKEN_OPEN_BRACKET || tk->type == TOKEN_CLOSE_BRACKET)
+        else if (tk->type == TK_OPEN_BRACKET || tk->type == TK_CLOSE_BRACKET)
         {
             printf("\e[7;34mbracket  ");
-            if (tk->type == TOKEN_OPEN_BRACKET)
+            if (tk->type == TK_OPEN_BRACKET)
                 printf("[OPB]:\e[0;34m (\e[0m\n");
             
             else
@@ -142,16 +142,16 @@ void print_tokens(token_t* tk)
             
         }
         
-        else if (tk->type == TOKEN_OPERATOR)
+        else if (tk->type == TK_OPERATOR)
         {
             printf("\e[7;36moperator ");
-            if (tk->operator.type == OPERATOR_ADD)
+            if (tk->op.type == OP_ADD)
                 printf("[ADD]:\e[0;36m +\e[0m\n");
             
-            else if (tk->operator.type == OPERATOR_SUB)
+            else if (tk->op.type == OP_SUB)
                 printf("[SUB]:\e[0;36m -\e[0m\n");
             
-            else if (tk->operator.type == OPERATOR_MUL)
+            else if (tk->op.type == OP_MUL)
                 printf("[MUL]:\e[0;36m *\e[0m\n");
             
             else

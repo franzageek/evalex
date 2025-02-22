@@ -84,7 +84,7 @@ u8 check_precedence(token_t* tk)
     ((
         op_stack.top > 0 
         &&
-        tk->operator.precedence < op_stack.stack[op_stack.top-1].operator.precedence
+        tk->op.prec < op_stack.stack[op_stack.top-1].op.prec
     ) || (
         op_stack.top == 0
     ))
