@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tokens/tokens.h"
-#include "parser/parser.h"
-#include "calc/calc.h"
+#include "evalex.h"
 
 int main(void)
 {

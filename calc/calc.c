@@ -1,6 +1,5 @@
-#include <intdef.h>
 #include <string.h>
-#include "calc.h"
+#include "../evalex.h"
 
 token_t* eval_expr(token_t* tk)
 {
