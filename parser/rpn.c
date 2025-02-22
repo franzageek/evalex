@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __DEBUG__
-#include <assert.h>
-#endif
-
 stack_t output_queue;
 stack_t op_stack;
 
@@ -93,17 +89,13 @@ u8 check_precedence(token_t* tk)
         op_stack.top == 0
     ))
         return 1;
-        
+
     else
         return 0;
 }
 
 token_t* stacks_cleanup(void)
 {
-    #ifdef __DEBUG__
-    assert(op_stack.top == 0);
-    #endif
-
     free(op_stack.stack);
     memset(&op_stack, 0, sizeof(stack_t));
     output_queue.max = output_queue.top = 0;
