@@ -96,7 +96,6 @@ void identify_token(token_t** tk)
 
         if (get_stack(STACK_OP)->top > 0)
             --get_stack(STACK_OP)->top;
-            
     }
     return;
 }

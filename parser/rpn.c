@@ -16,8 +16,10 @@ u8 init_stacks(u16 size)
     
     if (output_queue.stack == NULL && op_stack.stack== NULL)
         return 3;
+
     else if (output_queue.stack == NULL)
         return 1;
+
     else if (op_stack.stack == NULL)
         return 2;
 
@@ -91,6 +93,7 @@ u8 check_precedence(token_t* tk)
         op_stack.top == 0
     ))
         return 1;
+        
     else
         return 0;
 }

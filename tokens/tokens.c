@@ -17,7 +17,7 @@ token_t* tokenize_expr(const char* expr)
         return NULL;
     
     token_t* tk = NULL;
-
+    
     while (expr[index] != '\0')
     {
         if (token_count == MAX_TOKENS-1)

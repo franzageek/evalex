@@ -16,7 +16,6 @@ token_t* eval_expr(token_t* tk)
     
     while (tk->type != TOKEN_NULL)
     {
-        
         if (tk->type == TOKEN_OPERATOR)
         {
             index = (tk - tk_0) / sizeof(token_t);
