@@ -129,7 +129,7 @@ void print_tokens(token_t* tk)
     while (tk->type != TK_NULL)
     {
         if (tk->type == TK_LITERAL)
-            printf("\e[7;33mliteral       :\e[0;33m %ld\e[0m\n", tk->literal);
+            printf("\e[7;33mliteral       :\e[0;33m %lld\e[0m\n", tk->literal);
         
         else if (tk->type == TK_OPEN_BRACKET || tk->type == TK_CLOSE_BRACKET)
         {
