@@ -4,6 +4,7 @@
 
 u8 check_syntax(token_t* tk)
 <%
+    token_t* tk0 = tk;
     u16 err = 0;
     i16 brackets = 0;
 
@@ -13,7 +14,7 @@ u8 check_syntax(token_t* tk)
         <%
             case TK_OPERATOR:
             <%
-                if ((tk+1)->type != TK_LITERAL && (tk+1)->type != TK_OPEN_BRACKET)
+                if ((tk-tk0 == 0) || ((tk+1)->type != TK_LITERAL && (tk+1)->type != TK_OPEN_BRACKET))
                     ++err;
 
                 break;
