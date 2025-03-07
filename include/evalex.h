@@ -38,6 +38,7 @@ typedef struct
                 OP_SUB,
                 OP_MUL,
                 OP_DIV,
+                OP_MOD,
             } type;
             enum 
             {

@@ -4,6 +4,9 @@ CONFIG_RELEASE = -O2 -DNDEBUG
 CC = gcc
 CC_FLAGS = -Wall -Wextra $(CONFIG_RELEASE)
 
+main.out: main.c lib/libevalex.a
+	gcc main.c -o $@ -Llib -levalex 
+
 lib/libevalex.a: lib/calc.o lib/rpn.o lib/tokens.o lib/parser.o
 	ar rcs $@ $^
 	cp include/evalex.h lib/
