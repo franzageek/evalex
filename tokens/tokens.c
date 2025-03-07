@@ -52,7 +52,7 @@ token_t* tokenize_expr(const char* expr)
             }
             ch = expr[--index];
         }
-        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%')
         {
             tk->type = TOKEN_OPERATOR;
             tk->operator.type = 
@@ -66,8 +66,10 @@ token_t* tokenize_expr(const char* expr)
                 : (ch == '*') ?
                     OPERATOR_MUL 
 
-                :
+                : (ch == '/') ?
                     OPERATOR_DIV
+                :
+                    OPERATOR_MOD
             );
 
             tk->operator.precedence =
@@ -154,8 +156,10 @@ void print_tokens(token_t* tk)
             else if (tk->operator.type == OPERATOR_MUL)
                 printf("[MUL]:\e[0;36m *\e[0m\n");
             
-            else
+            else if (tk->operator.type == OPERATOR_DIV)
                 printf("[DIV]:\e[0;36m /\e[0m\n");   
+            else
+                printf("[MOD]:\e[0;36m %%\e[0m\n");
         }
         else
             printf("\e[7;31munknown       :\e[0;31m %c\e[0m\n", tk->value);

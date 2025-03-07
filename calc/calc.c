@@ -41,6 +41,11 @@ token_t* eval_expr(token_t* tk)
                     result = (tk-2)->literal / (tk-1)->literal;
                     break;
                 }
+                case OPERATOR_MOD:
+                {
+                    result = (tk-2)->literal % (tk-1)->literal;
+                    break;
+                }
                 default:
                     break;
 

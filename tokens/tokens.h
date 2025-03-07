@@ -12,6 +12,7 @@ typedef enum
     OPERATOR_SUB,
     OPERATOR_MUL,
     OPERATOR_DIV,
+    OPERATOR_MOD,
 } operator_type_t;
 
 typedef enum
